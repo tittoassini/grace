@@ -88,7 +88,9 @@ parseToken =
 
         , Combinators.choice
             [ Exists       <$ symbol "exists"
+            , Exists       <$ symbol "∃"
             , Forall       <$ symbol "forall"
+            , Forall       <$ symbol "∀"
             , Let          <$ symbol "let"
             , In           <$ symbol "in"
             , If           <$ symbol "if"
@@ -125,6 +127,11 @@ parseToken =
             , False_         <$ symbol "false"
             , True_          <$ symbol "true"
             , Null           <$ symbol "null"
+            , Fail           <$ symbol "fail"
+            , One           <$ symbol "one"
+            , Add           <$ symbol "add"
+            , All           <$ symbol "all"
+            , Gt            <$ symbol "gt"
             ] <?> "built-in value"
 
         , Combinators.choice
@@ -148,6 +155,7 @@ parseToken =
         , CloseParenthesis <$ symbol ")"
 
         , Arrow            <$ symbol "->"
+        , Assign           <$ symbol ":="
         , At               <$ symbol "@"
         , Bar              <$ symbol "|"
         , Colon            <$ symbol ":"
@@ -156,6 +164,8 @@ parseToken =
         , Dot              <$ symbol "."
         , Equals           <$ symbol "="
         , Lambda           <$ symbol "\\"
+        -- , Lambda           <$ symbol "λ"
+        , SemiColon        <$ symbol ";"
 
         , number
         , text
@@ -276,6 +286,17 @@ text = lexeme do
 
     return (TextLiteral (Text.concat texts))
 
+{-
+>>> map Char.isSymbol ['λ','∃','∀']
+[False,True,True]
+
+>>> map Char.isAlphaNum ['λ','∃','∀']
+[True,False,False]
+
+>>> map Char.isLower ['λ','∃','∀']
+[True,False,False]
+
+-}
 isLabel0 :: Char -> Bool
 isLabel0 c = Char.isLower c || c == '_'
 
@@ -349,6 +370,11 @@ reserved =
         , "null"
         , "then"
         , "true"
+        , "fail"
+        , "one"
+        , "all"
+        , "add"
+        , "gt"
         ]
 
 label :: Parser Token
@@ -414,10 +440,13 @@ quotedAlternative = lexeme do
 
 -- | Tokens produced by lexing
 data Token
-    = Alternative Text
+    = Add 
+    | All 
+    | Alternative Text
     | Alternatives
     | And
     | Arrow
+    | Assign
     | At
     | Bar
     | Bool
@@ -438,10 +467,12 @@ data Token
     | Else
     | Equals
     | Exists
+    | Fail
     | False_
     | Fields
     | File FilePath
     | Forall
+    | Gt
     | If
     | In
     | Int Int
@@ -470,6 +501,7 @@ data Token
     | Natural
     | NaturalFold
     | Null
+    | One
     | OpenAngle
     | OpenBrace
     | OpenBracket
@@ -477,6 +509,7 @@ data Token
     | Optional
     | Or
     | Plus
+    | SemiColon
     | Text
     | TextEqual
     | TextLiteral Text
