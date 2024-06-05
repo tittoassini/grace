@@ -1,6 +1,105 @@
 see also [[FlatLike]] [[ZMLike]] [[TopLike]]
 
 
+
+-- (=) pattern matches between its left and right side, possibly creating new bindings
+-- names are created by pattern matching, exists in the namespace where they are created
+one = 1
+(one two) = (1 2)
+
+-- pattern (->) expr
+-- when applied to a value pattern matches it with the value and evaluate the expr
+
+-- Names are recursive
+fact = {
+    0 -> 1
+    n -> n * fact (n - 1)
+}
+
+-- functions apply to a single value
+len = {
+    Nil -> 0
+    Cons _ t -> 1 + len t
+}
+
+
+len [11 22 33]
+3
+
+-- If we have a single case, this can be written as:
+x -> x + 1
+
+-- Functions can be nested to take multiple values
+x -> (y -> add x y) 
+
+-- functions ~~ smart maps
+
+dt = {
+    0 -> "zero"
+    1 -> "one"
+    _ -> "other"
+}
+
+dt 0
+"zero"
+
+-- arrays are maps indexed by naturals
+[1 2 3 ] ~~ {0->1,1->2,2->3}
+
+-- data is created implicitly, no data declarations required
+
+Nil
+Nil
+
+Cons (Cons 3 Nil)
+Cons (Cons 3 Nil)
+
+-- Every value has a basic type
+-- The basic type of every data value is itself
+type Nil
+Nil
+
+type $ Cons 3 (Cons Nil)
+Cons 3 (Cons Nil) 
+
+-- Types can be added as annotations and will be checked
+Nil : Nil
+
+Nil : Cons 
+ERROR Nil has type Nil not Cons
+
+-- more complex data types:
+List = a -> {
+    Nil  
+    Cons a (List a)
+}
+
+-- Every statement works in the evaluator monad, producing a new state and returning a value
+-- Operations like assignment modify the evaluator monad and can be defined as any other function
+(=) = \name -> (expr -> bind name expr) 
+
+-- Add a new assignment operator
+(:=) = (=)
+
+
+
+# Assignment 
+
+Add a, possibly recursive, (name,value | expression) to the environment.
+
+Can be used for values 
+
+a = false
+
+or to define data types
+
+bool = false 
+
+# Generalised Assignment, Pattern matching
+
+(a,a,b) = (false,false,true)
+
+
 # Equivalences 
 Value = Pattern = Type = Function 
 
@@ -11,8 +110,8 @@ bool = false | true
 - type: the data type bool = false | true
 - a function that returns false | true
     in verse a type is a function that applied to a value either fails (if the argument is not the right type) or return the value, bit like a filter
-    
-Operators: 
+
+# Basic Operators
 -- or, alternative 
 |
 
@@ -20,7 +119,7 @@ Operators:
 & 
 
 -- variable introduction
-(a) a+1 
+(a) a+1
 
 -- type declaration
 val : type
@@ -48,20 +147,19 @@ a |& b ~~ (a | b) | (a&b) ~~ true
 succ +1 prec -1 
 
 
-
 ## non-parametric types
 
 bool = false | true
 
 ## parametric types (variable introduction)
 
-list = \a -> cons a (list a) | nil 
+list = a -> cons a (list a) | nil 
 
-## symbolyc constructors
+## symbolic constructors
 
 [a]  = \a -> h : t | []
 
-## context manupulation functions
+## context manipulation functions
 
 -- import from remote module
 
@@ -78,7 +176,7 @@ with : definitions -> exp -> r
 
 Pattern matching is broken into branches that can be combined with | as usual:
 
-Type classes as open ended, value/type pattern matching:
+## Type classes as open ended, value/type pattern matching
 
 Most recently added branches have precedence
 
@@ -92,15 +190,38 @@ add |= (0:int,b:int) -> b
 
 add |= (a:int,b:int) -> plus a b
 
+v1 = 2
+
+v1 ,= 3 
+
+
+# Simplest possible language: data definitions plus data values
+
+qq{
+data Bool = False | True
+}
+
+False
+
 # Type classes are type function + context expanding
+
+list = data {a ->
+      cons a (list a) # the hash is an operator that attaches a comment
+      nil
+}
+
+either = data {l r ->
+    left l
+    right r
+}
 
 list a = cons a (list a) | nil
 
 -- type class is a type
-monoid a = {
+monoid = a. 
       zero : a
     , plus : a -> a -> a
-}
+
 
 -- with defaults 
 signedNumber a = {
@@ -266,3 +387,16 @@ Enough power to encode a generic flat/unflat function
 
 This whole web site is a quid2 value.
 
+
+## Grace Bug
+
+let not = merge {
+  True: \_ -> False {}
+  ,False: \_ -> True {}
+}
+      
+in  [not (True {})]
+
+works, but FAILS: 
+
+in  [not (True {}),not (True {})]
