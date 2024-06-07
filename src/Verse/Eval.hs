@@ -321,10 +321,10 @@ s1 = do
 
     -- x=⟨y,3⟩
     -- x=<x1,y1>
-    do
-        v1 <- TM.takeTMVar x1
-        v2 <- TM.takeTMVar x2
-        TM.writeTMVar x (v1,v2)
+    -- do
+    --     v1 <- TM.takeTMVar x1
+    --     v2 <- TM.takeTMVar x2
+    --     TM.writeTMVar x (v1,v2)
 
     y >>> x1
 

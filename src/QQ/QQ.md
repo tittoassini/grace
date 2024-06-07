@@ -1,7 +1,6 @@
 see also [[FlatLike]] [[ZMLike]] [[TopLike]]
 
 
-
 -- (=) pattern matches between its left and right side, possibly creating new bindings
 -- names are created by pattern matching, exists in the namespace where they are created
 one = 1

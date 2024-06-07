@@ -3,6 +3,12 @@
 {-# LANGUAGE OverloadedStrings     #-}
 module QQ where
 
+
+{-
+>>> "{False -> True , True -> False } False"
+"{False -> True , True -> False } False"
+
+-}
 import Control.Monad
 import Data.Text (Text, intercalate, pack)
 

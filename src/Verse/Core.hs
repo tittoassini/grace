@@ -234,14 +234,13 @@ type Eval = State.State [(Var, Exp)] [Value]
 type Scope = State.State [(Var, Exp)]
 
 
--- with :: Var -> Maybe Exp -> Exp -> Eval
--- Evaluate an expression in the curent context augmented with a bound variable
+-- Evaluate an expression in the current context augmented with a bound variable
 with :: Var -> Exp -> Exp -> Eval
 with v s e = do
-    ctx <- State.get
-    rs <- State.withState ((v,s) :) $ eval e
-    State.put ctx
-    return rs
+    previous <- State.get
+    r <- State.withState ((v,s) :) $ eval e
+    State.put previous
+    return r
 
 -- add v s' e = do
 --     ctx <- State.get

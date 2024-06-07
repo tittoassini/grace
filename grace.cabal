@@ -58,7 +58,8 @@ library
     Verse.Pretty
     Verse.Parser
     Verse.Eval
-    QQ
+    QQ.Core
+    QQ.Pretty
 
   other-modules:    Grace.Compat
   default-language: Haskell2010
