@@ -1,0 +1,31 @@
+inc = x -> x + 1
+
+incfst = <x,y> -> <x+1,y>
+
+x:Bool -> (y -> x && y)
+
+and = {
+    x:Bool -> {
+        y -> x && y   
+    }
+
+}
+
+{
+    Left l -> even l
+    Right r -> b
+} 
+Left 11
+
+"Functions as pattern matching"
+not = { 
+    True -> False
+    False -> True
+}
+
+True = True
+
+True = False
+
+
+

@@ -1,0 +1,13 @@
+"Lists"
+[]
+
+[1 2 3]
+
+{1 2 3}
+
+<1 2 3>
+
+"Lists with built-in operator"
+[| 11 22 |]
+
+<* 1 2 *>

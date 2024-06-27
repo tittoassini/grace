@@ -1,0 +1,32 @@
+See https://code.visualstudio.com/blogs/2021/11/08/custom-notebooks
+
+A document that includes text, code and evaluations.
+
+A literal programming version of a namespace.
+
+Equivalent to an interpolated string?
+
+Definition:
+
+`
+x = 3 
+`
+
+Evaluation 
+`x` 
+
+Assertion:
+
+`
+x => 3
+`
+
+
+
+
+
+
+
+
+
+

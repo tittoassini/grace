@@ -1,0 +1,63 @@
+"
+Functions are lists of pattern -> value reductions where all values have the same type
+
+Functions are smart maps:
+"
+f1 = {
+    0 -> "zero"
+    1 -> "one"
+    _ -> "other"
+} : Int -> String
+
+f1 2
+=> "other"
+
+
+"
+Functions that have a single pattern are written as:
+
+pattern -> returned_value 
+"
+Cons t _ -> Pair t t
+
+(Cons 1 Nil)
+
+"Functions can be nested to take multiple values" 
+x -> y -> add x y
+
+"Arrays are maps indexed by naturals, so they are also silly functions:"
+
+m1 = ["zero","one"]
+=> {0->"zero",1->"one"}
+
+"And can be applied as any other function:"
+m1 0
+=> "zero"
+
+"? So they have a functional type:"
+m1 : Int -> String
+
+(x -> y -> x + y) 3
+=> (y -> 3 + x)
+
+"or closure?"
+
+=> {
+    x = 3
+    y -> x + x
+}
+
+"But what about merging/appending of functions?"
+
+"
+If $ indicates functional application than we can remove the app as a separate syntactical form.
+
+f
+
+is parsed as
+
+(f $)
+
+so all apps become binary?
+"
+

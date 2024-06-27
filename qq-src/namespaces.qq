@@ -1,0 +1,46 @@
+"Bindings are created by pattern matching"
+
+"They are visible in the context where they are created and its lexically included subcontexts"
+
+"Namespaces = Records"
+
+"
+Records are data collections of fields, each might have a different type.
+"
+{
+    num1 = 3
+    str1 = "ok"
+} : {num1:Int,str1:Text}
+
+{
+    (one,two) = (1,2)
+} : ? 
+
+"We can access their components"
+n1.two
+=> 2:Int
+
+"? The type of ."
+. : {fld:T} -> fld:Symbol -> T
+
+"Namespaces are records"
+n1 = {
+    two = 2
+    three = one + two
+}
+=> {
+    two = 2
+    double : Int -> Int = x -> x * 2
+    four = double two
+}: {two:Int,double : Int -> Int,four:Int}
+
+
+"All bindings in a namespace are in a mutually recursive group" 
+{
+    fact = {
+        0 -> 1
+        n -> n * fact (n - 1)
+    }
+    r = fact 11
+}
+

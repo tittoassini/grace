@@ -1,0 +1,41 @@
+"
+Data types are created implicitly, no data declaration is required.
+
+Every value has a basic/smallest type.
+
+The basic type of every data value is itself?
+
+Types are values.
+"
+Nil
+=> Nil:Nil 
+
+Cons (Cons 3 Nil)
+=> Cons (Cons 3 Nil) : Cons (Cons 3 Nil)
+
+"The top/largest type is _"
+_
+_:_
+
+1
+=> 1:1
+
+"Types can be added as annotations and will be checked"
+Nil : Nil
+
+Nil : Cons 
+ERROR Nil has type Nil not Cons
+
+"Explicitly defined data types"
+
+Bool = False | True
+
+"Parametric types:"
+
+List = a -> {
+    Nil  
+    Cons a (List a)
+}
+
+"Infix constructors"
+[a]  = \a -> h : t | []

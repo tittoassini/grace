@@ -1,0 +1,5 @@
+"Tuples are fixed size sequences of values"
+
+<1,"abc"> : <Int,String>
+
+

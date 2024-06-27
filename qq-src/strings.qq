@@ -1,0 +1,9 @@
+"Single line strings"
+
+"
+Multi
+Line
+Strings are easy to write!
+"
+
+"TODO: interpolation/templating/references to objects.."

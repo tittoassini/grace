@@ -1,0 +1,34 @@
+"Pattern matching can fail or succeed and return a possibly empty list of bindings"
+
+"We can pattern match explicitly using ~ that return a Maybe [Binding]"
+
+"Or forcefully using =, that will throw an error in case of failure"
+
+"Succeeds, no bindings are created"
+True = True
+
+3 = 3
+
+"abc" = "abc"
+=> Just []
+
+"Wildcard"
+_ = 3
+
+False ~ True
+=> Error "Pattern Mismatch"
+
+Cons _ t ~ Cons 1 Nil
+=> Just [t:=Nil]
+
+"Creates one=1 and two=2 bindinds in current context"
+[one two] = [1 2]
+
+"Are patterns just values?"
+
+"
+Should pattern matching be bidirectional?
+
+[1 2] = [one two]
+"
+

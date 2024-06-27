@@ -1,0 +1,13 @@
+"
+Macros are ordinary functions that are executed on the parsed source.
+
+Macros are hygienic and have access to current bindings.
+"
+
+-- Every statement works in the evaluator monad, producing a new state and returning a value
+-- Operations like assignment modify the evaluator monad and can be defined as any other function
+
+(=) = \name -> (\expr -> bind name expr) 
+
+-- Add a new assignment operator
+(:=) = (=)

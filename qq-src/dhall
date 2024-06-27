@@ -1,0 +1,4 @@
+let t = λ(union : < Left : Natural | Right : Bool >) → merge { Left = Natural/even, Right = λ(b : Bool) → b } union : Bool
+in t < Left=13 | Right:Bool >
+
+

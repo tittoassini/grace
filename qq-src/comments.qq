@@ -1,0 +1,10 @@
+"
+No comments, just strings instead
+
+However: if in the docs we want to refer to definitions, we need a template capability, 
+see https://www.unison-lang.org/docs/language-reference/documentation-literals/
+
+Also: How to annotate a string to a syntactical/semantic entity?
+"
+
+value :"A textual annotation" 

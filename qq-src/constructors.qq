@@ -1,0 +1,7 @@
+"Constructors are/should start with an uppercase character?"
+
+False
+
+True
+
+Cons False Nil
