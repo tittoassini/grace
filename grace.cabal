@@ -32,6 +32,7 @@ library
     , text                         >=1.2.4.0
     , unordered-containers
     , logict
+    , zm >= 0.3.11
 
   exposed-modules:
     Grace.Context
