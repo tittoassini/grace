@@ -1,7 +1,15 @@
-"Constructors are/should start with an uppercase character?"
+"
+Constructors are either  
+* prefix alphanumeric starting with an uppercase character
+* prefix alphanumeric quoted with '
+* infix symbols
 
+"
 False
 
-True
-
 Cons False Nil
+
+'true
+
+::
+

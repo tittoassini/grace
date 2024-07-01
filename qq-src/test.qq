@@ -18,10 +18,6 @@ and = {
 Left 11
 
 "Functions as pattern matching"
-not = { 
-    True -> False
-    False -> True
-}
 
 True = True
 

@@ -1,8 +1,9 @@
+{
 "
 Functions are lists of pattern -> value reductions where all values have the same type
 
 Functions are smart maps:
-"
+" @
 f1 = {
     0 -> "zero"
     1 -> "one"
@@ -11,7 +12,6 @@ f1 = {
 
 f1 2
 => "other"
-
 
 "
 Functions that have a single pattern are written as:
@@ -60,4 +60,5 @@ is parsed as
 
 so all apps become binary?
 "
+}
 
