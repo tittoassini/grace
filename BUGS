@@ -1,0 +1,12 @@
+## Grace Bug
+
+let not = merge {
+  True: \_ -> False {}
+  ,False: \_ -> True {}
+}
+      
+in  [not (True {})]
+
+works, but FAILS: 
+
+in  [not (True {}),not (True {})]
