@@ -1,27 +1,18 @@
-inc = x -> x + 1
-
-incfst = <x,y> -> <x+1,y>
-
-x:Bool -> (y -> x && y)
 
 and = {
-    x:Bool -> {
-        y -> x && y   
-    }
-
+    False -> {_ -> False}
+    True -> {y -> y}
 }
 
 {
     Left l -> even l
     Right r -> b
-} 
-Left 11
+} (Left 11)
 
 "Functions as pattern matching"
 
 True = True
 
 True = False
-
 
 

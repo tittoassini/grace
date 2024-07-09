@@ -1,0 +1,9 @@
+{  
+   add = {  
+            Z -> (y -> y)
+            S x -> (y -> add x (S y))
+         }
+   a0 = add Z Z
+   a1 = add (S Z) Z
+   a2 = add (S Z) (S Z)
+} "a0"

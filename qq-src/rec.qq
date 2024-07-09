@@ -1,0 +1,20 @@
+{&  
+    le = {&  
+             l2 = len (Cons 1 (Cons 2 Nil))
+             len = {  
+                      Nil -> Z
+                      Cons h t -> S (len t)
+                   }
+             l0 = len Nil
+             add = {  
+                      Z -> {  
+                              y -> y
+                           }
+                      S x -> {  
+                                y -> add x (S y)
+                             }
+                   }
+         &}
+    r1 = le "l2"
+    r2 = le "l0"
+&} "r1"

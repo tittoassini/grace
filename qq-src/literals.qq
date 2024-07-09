@@ -1,3 +1,5 @@
 "Literals are basic syntactical forms that are flexibly mapped to actual types"
 
-
+2 : N
+->
+S (S Z)
