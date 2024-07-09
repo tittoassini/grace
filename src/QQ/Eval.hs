@@ -12,8 +12,9 @@ module QQ.Eval (
 import Data.Bifunctor (Bifunctor (..), first)
 import Data.Maybe
 import Data.Text (Text, unpack)
-import ZM.Parser hiding (Value)
-import ZM.Parser.Pretty
+import qualified Data.Text as T
+import ZM.Parser hiding (Value, value)
+import ZM.Parser.Exp (loadMdl)
 
 {- eval an expression, leaving behind a `Value` free of reducible
     sub-expressions
@@ -24,14 +25,9 @@ import ZM.Parser.Pretty
 
 >>> let e src = show . eval [] <$> parseMdl src
 
->>> let pe src = show . pretty . eval [] <$> parseMdl src
-No instance for (Pretty Value) arising from a use of `pretty'
-In the first argument of `(.)', namely `pretty'
-In the second argument of `(.)', namely `pretty . eval []'
-In the first argument of `(<$>)', namely `show . pretty . eval []'
+let pe src = show . pretty . eval [] <$> parseMdl src
 
 >>> e "11"
-Right "VLit (LInteger 11)"
 
 >>> e "Cons 1 Nil"
 Right "VApp (VApp (VCon \"Cons\") (VLit (LInteger 1))) (VCon \"Nil\")"
@@ -52,11 +48,11 @@ Right "VLit (LInteger 1)"
 >>> e "1 2"
 Right "VApp (VLit (LInteger 1)) (VLit (LInteger 2))"
 
->>> e "{&\nx=1\ny=2\nf={T->x\nF->y\n}\nf1=f T\nf2=f F\n&} x"
+>>> e "{&\nx=1\ny=2\nf={T->x\nF->y\n}\nf1=f T\nf2=f F\n&} \"x\""
 
->>> e "{&\nl1=len (Cons 1 (Cons 2 Nil))\nlen = {\nNil -> Z\nCons h t -> S (len t)}\n&} \"l\""
+>>> e "{&\nl=len Nil\nlen = {\nNil -> Z\nCons h t -> S (len t)}\n&} \"l\""
 
->>> e "{&\nl1=len (Cons 1 (Cons 2 Nil))\nlen = {\nNil -> Z\nCons h t -> S (len t)}\n&} \"l\""
+>>> e "{&\nl=len (Cons 1 (Cons 2 Nil))\nlen = {\nNil -> Z\nCons h t -> S (len t)}\n&} \"l\""
 
 Recursive definitions
 
@@ -95,11 +91,7 @@ ifthenelse = {
 -}
 e src = show . eval [] <$> parseMdl src
 
-parseModule fileName = do
-  src <- T.readFile $ concat ["../qq-src/", fileName, ".qq"]
-  T.putStrLn src
-  putStrLn (maybe "Nothing" (prettyShow . unAnn) (parseMaybe mdl src))
-
+t f = loadMdl $ concat ["qq-src/", f, ".qq"]
 
 eval ::
     -- | Evaluation environment (starting at @[]@ for a top-level expression)
@@ -113,12 +105,20 @@ eval env (Ann _ (App f a)) =
   where
     f' = eval env f
     a' = eval env a
+eval env (Ann _ (InfixApp a op b)) =
+    apply (apply op' a') b'
+  where
+    op' = solveVar op 0 env
+    a' = eval env a
+    b' = eval env b
+
+-- eval env (Ann _ (Infix name)) = solveVar name 0 env
+
 eval _ (Ann _ (Con name)) = VCon name
 eval env (Ann _ (Prefix name)) =
     case lookupVar name 0 env of
         Just v -> v
         Nothing -> VMatch name
-eval env (Ann _ (Infix name)) = solveVar name 0 env
 -- Lists
 eval env (Ann _ (Arr (Bracket{open = '[', close = ']', op = Nothing, values = vs}))) =
     foldr (\v l -> VApp (VApp (VCon "::") (eval env v)) l) (VCon "[]") vs
@@ -129,14 +129,17 @@ eval env (Ann _ (Arr (Bracket{open = '{', close = '}', op = Just "&", values = b
     env'' = map (second (eval env')) bs
     env' = map (second (VLazy env'')) bs ++ env
     bs = map evalBranch branches
-    evalBranch (Ann _ (App (Ann _ (App (Ann _ (Infix "=")) p@((Ann _ (Prefix n))))) e)) = (n, e)
+
+    evalBranch (Ann _ (InfixApp (Ann _ (Prefix n)) "=" e)) = (n, e)
+    -- evalBranch (Ann _ (App (Ann _ (App (Ann _ (Infix "=")) p@((Ann _ (Prefix n))))) e)) = (n, e)
     evalBranch notABranch = err ["not a definition", show notABranch]
 
 -- Lambda/Case
 eval env (Ann _ (Arr (Bracket{open = '{', close = '}', op = Nothing, values = branches}))) =
     VLam $ Closure (map evalBranch branches) env
   where
-    evalBranch (Ann _ (App (Ann _ (App (Ann _ (Infix "->")) p)) r)) = (evalPattern p, r)
+    evalBranch (Ann _ (InfixApp p "->" r)) = (evalPattern p, r)
+    -- evalBranch (Ann _ (App (Ann _ (App (Ann _ (Infix "->")) p)) r)) = (evalPattern p, r)
     evalBranch notABranch = err ["not a pattern matching clause:", show notABranch]
 -- Generic Bracket evaluation, apply op to each branch
 -- TODO: no evaluation
