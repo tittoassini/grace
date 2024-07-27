@@ -17,11 +17,12 @@ library
     , generic-lens
     , insert-ordered-containers
     , lens
+    , logict
     , megaparsec
     , modern-uri
-    -- , logicst
     , mtl
     , parser-combinators
+    , pretty-show
     , prettyprinter
     , prettyprinter-ansi-terminal
     , safe-exceptions
@@ -31,9 +32,9 @@ library
     , template-haskell
     , text                         >=1.2.4.0
     , unordered-containers
-    , logict
-    , zm >= 0.3.11
+    , zm                           >=0.3.11
 
+  -- , logicst
   exposed-modules:
     Grace.Context
     Grace.Domain
@@ -50,19 +51,24 @@ library
     Grace.Parser
     Grace.Pretty
     Grace.Syntax
+    Grace.Test
     Grace.TH
     Grace.Type
-    Grace.Test
     Grace.Value
     Grace.Width
-    Verse.Core
-    Verse.Lexer
-    Verse.Pretty
-    Verse.Parser
-    Verse.Eval
+    QQ
+    QQ.Compiler
     QQ.Core
-    QQ.Pretty
+    QQ.Eval
+    QQ.Evaluate
     QQ.Parser
+    QQ.Pretty
+    QQ.Value
+    Verse.Core
+    Verse.Eval
+    Verse.Lexer
+    Verse.Parser
+    Verse.Pretty
 
   other-modules:    Grace.Compat
   default-language: Haskell2010

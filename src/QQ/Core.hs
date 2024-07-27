@@ -20,19 +20,22 @@ import qualified ZM.Parser as P
 Con "True"
 
 >>> e $ var "a"
-Free (Variable "a" (-1))
+Variable not in scope: e :: Exp -> b_a14md[sk:1]
 
 >>> e (Val (Con "True"))
-Con "True"
+Variable not in scope: e :: Exp -> t_a14oE[sk:1]
 
 >>> P.parseMaybe P.value "Cons {head:a, tail:List a}"
+No instance for (Show1 (ValF Literal Void))
+  arising from a use of `evalPrint'
+In a stmt of an interactive GHCi command: evalPrint it_a14py
 
 -}
-n :: Maybe P.Value
-n = P.parseMaybe P.value "Nil" -- Cons {head:a, tail:List a}"
+-- n :: Maybe P.Value
+-- n = P.parseMaybe P.value "Nil" -- Cons {head:a, tail:List a}"
 
-e :: Exp -> Value
-e = evaluate []
+-- e :: Exp -> Value
+-- e = evaluate []
 
 -- evaluate :: Exp -> Value
 -- evaluate = evaluateWith []
@@ -242,7 +245,7 @@ type Branch = (Pattern, Exp)
 
 -- What cannot be further evaluated
 data Value
-    = Free Variable
+    = Free Variable -- ?
     | Con Text
     | VApp Value Value -- Data
     | Clo Closure
@@ -291,7 +294,7 @@ lookupVariable name index environment =
             -- converting back to the `Syntax` type.
             Free $ Variable name (negate index - 1)
 
-lookupVar :: Text -> Int -> [(Text, Val)] -> Maybe Val
+lookupVar :: Text -> Int -> [(Text, a)] -> Maybe a
 lookupVar name index environment =
     case environment of
         (key, value) : rest ->
