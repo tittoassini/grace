@@ -1,0 +1,28 @@
+{&  
+   "\nParser a = String -> Maybe (a,String)\n\nMaybe a = Zero | One a\n"
+   char = {  
+             c -> {  
+                     Nil -> Zero
+                     Cons c @ (0 t -> One [  
+                                             c , t
+                                          ])
+                  }
+          }
+
+   alt = l -> r -> i -> (on (l i) {  
+                                Zero -> r i
+                                One s -> One s 
+                            } )
+
+ c1 =
+"
+alt l r i = case l i of 
+    Zero -> r i 
+    p@(a,t) -> p
+
+alt l r i = (\case 
+    Zero -> r i 
+    p@(a,t) -> p) (l i)
+"         
+&}
+

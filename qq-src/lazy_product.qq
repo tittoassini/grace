@@ -1,0 +1,5 @@
+{&
+    bottom = bottom
+    anyPair = (x,y) -> 0
+    r = anyPair bottom
+&} r == 0
