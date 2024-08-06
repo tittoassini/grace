@@ -1,0 +1,20 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../zm"
+		},
+		{
+			"path": "../Idris2"
+		},
+		{
+			"path": "../amy"
+		},
+		{
+			"path": "../koka"
+		}
+	],
+	"settings": {}
+}

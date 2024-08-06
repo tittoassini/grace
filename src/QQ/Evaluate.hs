@@ -12,9 +12,10 @@ import QQ.Value
 import Text.Show.Pretty (ppShow)
 import ZM.Parser.Literal
 
+t = putStrLn . ee
+
 ee = either id ppShow . textToEval stdEnv
 
-t = putStrLn . ee
 
 {- $setup
 >>> let e = error . ee
@@ -80,7 +81,7 @@ eval env (VApp f a) =
       >>> e "{F -> T \n T -> F} Nil"
 
       >>> e "{F -> T \n T -> F} F"
-
+      
     >>> e "(x -> y -> x) X Y"
     VVar "x" 0
 
@@ -96,9 +97,8 @@ eval env (VApp f a) =
     >>> e "{F -> T \n T -> F} F"
     VCon "T" []
 
-    >>> e "(x -> x) 11"
-
-    -}
+   >>> e "(x -> x) 11"
+  -}
   apply (VCase branches) arg =
     let matches = mapMaybe (\l@(PatLambda{..}) -> (,l) <$> match lamPat arg) branches
      in case matches of
@@ -160,6 +160,13 @@ eval env (VApp f a) =
   VApp (VLit (LInteger 1)) (VLit (LInteger 2))
   -}
   apply a b = VApp a b
+
+{-
+>>> e "fix (fib -> {0->0 \n 1->1 \n n-> addIntInt (fib (subIntInt n 1)) (fib (subIntInt n 2))} )"  
+
+>>> e "fix (this -> {& x=1 \ny=this  \"x\" &}) \"x\" "
+-}
+eval env (VFix f) = eval env $ VApp f (VFix f)
 eval env (Let binds e) = eval (binds ++ env) e
 eval env (VVar n i) = solveVar n i env
 eval env (VCase branches) = VCase $ map (\b -> b{lamEnv = env ++ lamEnv b}) branches

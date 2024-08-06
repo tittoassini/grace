@@ -1,14 +1,4 @@
-{
-not = { 
-    True -> False
-    False -> True
-}
-
-or = { 
-    True -> True
-    False -> {
-        True -> True
-        False -> False
-    }
-}
+{  
+   F -> T
+   T -> F
 }

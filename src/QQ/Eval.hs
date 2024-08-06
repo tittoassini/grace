@@ -101,7 +101,7 @@ VApp
 VApp (VApp (VPrim addIntInt ()) (VLit (LInteger 1))) (VMatch "j")
 -}
 stdEnv :: Env
-stdEnv = primitives
+stdEnv = ("fix", VCase [PatLambda{lamEnv = [], lamPat = VMatch "f", lamBody = VFix (VVar "f" 0)}]) : primitives
 
 value ::
   -- | Evaluation environment (starting at @[]@ for a top-level expression)
@@ -329,6 +329,16 @@ VEnv
   , ( "subIntInt" , VPrim subIntInt () )
   ]
 
+{
+ x = 2
+ y = x
+}
+
+fix {
+x = {x:x,y:y} -> 2
+y = {x:x,y:y} -> x
+}
+
 >>> e "{& x=2 \n y= x &} \"y\""
 VApp
   (VEnv
@@ -339,9 +349,10 @@ VApp
      ])
   (VLit (LString "y"))
 
->>> e "{& x=subIntInt 2 z  \n z=3 &}"
+>>> e "{& x=subIntInt 2 z  \n z=3 \n y=x &}"
 VEnv
-  [ ( "z" , VLit (LInteger 3) )
+  [ ( "y" , VVar "x" 0 )
+  , ( "z" , VLit (LInteger 3) )
   , ( "x"
     , VApp (VApp (VPrim subIntInt ()) (VLit (LInteger 2))) (VVar "z" 0)
     )

@@ -35,7 +35,9 @@ data Value
     | VEnv Env -- A list of possibly mutually recursive definitions
     | VVar Text Int
     | VMatch Text -- Matching symbol, e.g. "x"
+    -- NOTE: Wildcards can also be expressed as a fresh variable, might not be needed here
     | VWild -- Matching wildcard, e.g. _ _aWildcard
+    | VFix Value
     | Let Env Value
     | {-
       A Case is a simple form of pattern matching, where patterns are simple (not nested) and exhaustive (no guarantees of this)
